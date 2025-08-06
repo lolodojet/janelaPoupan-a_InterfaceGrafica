@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Poupanca {
-    
+
     public static void main(String[] args) {
         System.out.println("Programa rodando");
 
@@ -17,13 +17,13 @@ public class Poupanca {
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        
+
         // Label e campo do juros
         c.gridx = 0;
         c.gridy = 0;
         c.anchor = GridBagConstraints.EAST;
         panel.add(new JLabel("Juros ao mês %: "), c);
-        
+
         c.gridx = 1;
         c.gridy = 0;
         c.weightx = 1.0;
@@ -31,7 +31,6 @@ public class Poupanca {
         JTextField juros = new JTextField(10);
         panel.add(juros, c);
 
-        
         // Label e campo anos
         c.gridx = 0;
         c.gridy = 1;
@@ -46,8 +45,7 @@ public class Poupanca {
         JTextField anos = new JTextField(10);
         panel.add(anos, c);
 
-
-        //  Label e campo deposito 
+        // Label e campo deposito
         c.gridx = 0;
         c.gridy = 2;
         c.weightx = 0;
@@ -70,10 +68,12 @@ public class Poupanca {
 
         c.gridx = 1;
         c.gridy = 3;
-        c.weightx = 1.0; 
+        c.weightx = 1.0;
         c.anchor = GridBagConstraints.WEST;
         JTextField total = new JTextField(10);
-        total.setEditable(false);
+        // total.setEditable(false);
+        total.setOpaque(false);
+        total.setBorder(null);
         panel.add(total, c);
 
         c.gridx = 1;
@@ -82,8 +82,27 @@ public class Poupanca {
         c.anchor = GridBagConstraints.EAST;
         c.insets = new Insets(10, 2, 2, 2);
         JButton button = new JButton("OK");
-        panel.add(button, c);
 
+        button.addActionListener(e -> {
+
+            try {
+                double taxaJuros = Double.parseDouble(juros.getText().trim()) / 100.0;
+                int numeroAnos = Integer.parseInt(anos.getText().trim());
+                int numeroMeses = numeroAnos * 12;
+                double depositoMes = Double.parseDouble(deposito.getText().trim());
+                double resultado = 0.0;
+
+                for (int i = 0; i < numeroMeses; i++) {
+                    resultado += depositoMes;
+                    resultado += resultado * taxaJuros;
+                }
+                total.setText(String.format("%.2f", resultado));
+            } catch (NumberFormatException ex) {
+                total.setText("Você digitou algo errado, por favor tente novamente!");
+            }
+        });
+
+        panel.add(button, c);
         frame.setVisible(true);
     }
 }
